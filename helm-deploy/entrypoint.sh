@@ -98,6 +98,9 @@ export HELM_SECRETS_QUIET="true"
 echo "👇"
 set -x
 
+# Re-install helm secrets plugin (lives in the base image). For some reason GA can't find it, even though it exists 100% on local docker run.
+helm plugin install https://github.com/jkroepke/helm-secrets --version v4.1.1
+
 #helm3 update or new install
 if ! /usr/local/bin/helm secrets upgrade --install "${HELM_PARAMS[@]}" --timeout "$HELM_TIMEOUT" --namespace "$HELM_RELEASE_NAMESPACE" "$HELM_RELEASE_NAME" "$HELM_CHART_PATH"; then
 	{ set +x; } 2>/dev/null
