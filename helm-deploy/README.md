@@ -45,7 +45,7 @@ jobs:
         GKE_PROJECT: <your project in GKE>
         GKE_CLUSTER_NAME: <the name of your cluster on GKE>
         GKE_ZONE: europe-west1-b
-        HELM_VALUES: image.tag=demo
+        HELM_VALUES: image.tag=demo,image.repository=demo-repo
         HELM_VALUES_FILES: <values-file.yaml>, <values-file-2.yaml>
 ```
 
