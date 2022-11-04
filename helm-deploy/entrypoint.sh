@@ -71,9 +71,12 @@ HELM_CHART_PATH="${HELM_CHART_PATH:-"${1:-""}"}"
 HELM_RELEASE_NAME="${HELM_RELEASE_NAME:-""}"
 declare -a HELM_PARAMS=(
 	"--cleanup-on-fail"
+	"--wait"
+	"--atomic"
 	"--history-max" "$HELM_HISTORY_MAX"
 )
 HELM_VALUES="${HELM_VALUES:-""}"
+IFS=$',' read -r -a HELM_VALUES <<< "$HELM_VALUES"
 IFS=$',' read -r -a HELM_VALUES_FILES <<< "$HELM_VALUES_FILES"
 
 if [[ -z "$HELM_RELEASE_NAME" ]]; then
@@ -87,8 +90,10 @@ for i in "${HELM_VALUES_FILES[@]}"; do
 done
 
 if [[ -n "$HELM_VALUES" ]]; then
-	HELM_PARAMS+=("--set-string")
-	HELM_PARAMS+=("$HELM_VALUES")
+        for i in "${HELM_VALUES[@]}"; do
+	        HELM_PARAMS+=("--set-string")
+	        HELM_PARAMS+=("$(echo "$i" | sed 's/[[:space:]]//g')") # empty any space
+        done
 fi
 
 export HELM_SECRETS_QUIET="true"
