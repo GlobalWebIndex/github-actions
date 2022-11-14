@@ -87,6 +87,9 @@ function helm_template_params() {
 # Required for helm secrets template to print yamls only
 export HELM_SECRETS_QUIET="true"
 
+# Re-install helm secrets plugin (lives in the base image). For some reason GA can't find it, even though it exists 100% on local docker run.
+helm plugin install https://github.com/jkroepke/helm-secrets --version v4.1.1
+
 for files in "${HELM_VALUES_FILES_GROUPS[@]}"; do
 	echo
 	echo "📂👇 Checking ${HELM_CHART_PATH} with values from: ${files}"
