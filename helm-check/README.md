@@ -1,3 +1,14 @@
+#########################
+# DEPRECATED
+# 
+# While kube-score and kubeval were fitting nicely our purposes in the past, this is no longer the case.
+# kubeval isn't supported anymore, meaning that we would have to find an alternative either way to support
+# our current 1.21 version. Kube-score was misbeaving in certain scenarios, giving a false sense of safety
+# to the engineers.
+
+# We need to take a step back and find better alternatives.
+#########################
+
 # Helm check GA plugin
 
 ## What it does
@@ -30,7 +41,7 @@ jobs:
     container:
       image: ghcr.io/catthehacker/ubuntu:act-latest
     steps:
-    - uses: actions/checkout@v3 # Checkout your code
+    - uses: actions/checkout@v4 # Checkout your code
       with:
         repo-token: ${{ secrets.GITHUB_TOKEN }}
     - name: helm-check # Run this plugin
