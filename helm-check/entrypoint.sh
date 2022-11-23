@@ -72,8 +72,10 @@ function helm_template_params() {
 	IFS="," read -r -a values_files <<< "${helm_values_files}"
 
 	if [[ -n "$HELM_VALUES" ]]; then
-		params+=("--set-string")
-		params+=("$HELM_VALUES")
+        for i in "${HELM_VALUES[@]}"; do
+	        params+=("--set-string")
+	        params+=("$(echo "$i" | sed 's/[[:space:]]//g')") # empty any space
+        done
 	fi
 
 	for i in "${values_files[@]}"; do
@@ -108,6 +110,7 @@ for files in "${HELM_VALUES_FILES_GROUPS[@]}"; do
 
 	echo "  🔦 kubeval --quiet --force-color --kubernetes-version ${KUBERNETES_VERSION}.0 ${KUBEVAL_PARAMS[*]}"
 	kubeval --quiet --force-color --kubernetes-version "${KUBERNETES_VERSION}.0" "${KUBEVAL_PARAMS[@]}" /tmp/helm.out || exit 62
+	cat /tmp/helm.out
 
 	echo "  💎 kube-score score --kubernetes-version v${KUBERNETES_VERSION} ${KUBESCORE_PARAMS[*]}"
 	kube-score score --kubernetes-version "v${KUBERNETES_VERSION}" "${KUBESCORE_PARAMS[@]}" /tmp/helm.out || exit 63
